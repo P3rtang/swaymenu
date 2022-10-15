@@ -6,4 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+gio = "0.15.12"
+gtk = { version = "0.4.8", package = "gtk4" }
+
+[build-dependencies]
 gtk = { version = "0.4.8", package = "gtk4" }

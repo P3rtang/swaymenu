@@ -1,10 +1,16 @@
-use gtk::prelude::*;
-use gtk::{Application, ApplicationWindow, Button};
-use gtk::ffi::gtk_widget_get_style_context;
+mod window;
 
-const APP_ID: &str = "org.gtk_rs.HelloWorld2";
+use gtk::prelude::*;
+use gtk::{gio, Application};
+use window::Window;
+
+const APP_ID: &str = "org.gtk_rs.CompositeTemplates1";
 
 fn main() {
+    // Register and include resources
+    gio::resources_register_include!("composite_templates_1.gresource")
+        .expect("Failed to register resources.");
+
     // Create a new application
     let app = Application::builder().application_id(APP_ID).build();
 
@@ -14,20 +20,8 @@ fn main() {
     // Run the application
     app.run();
 }
-
 fn build_ui(app: &Application) {
-    let button = Button::builder()
-        .label("Exit Sway")
-        .margin(10)
-        .build();
-
-    let window = ApplicationWindow::builder()
-        .application(app)
-        .title("My GTK App")
-        .child(&button)
-        .build();
-
-
-    // Present window
+    // Create new window and present it
+    let window = Window::new(app);
     window.present();
 }
