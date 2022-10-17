@@ -1,4 +1,5 @@
 mod window;
+mod custom_widgets;
 
 use gtk::prelude::*;
 use gtk::{gio, Application};

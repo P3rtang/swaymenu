@@ -3,14 +3,25 @@ use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, Button, CompositeTemplate, Label};
 
+use crate::custom_widgets::LockSwayToggle;
+
 // Object holding the state
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/org/gtk_rs/example/MainWindow.ui")]
 pub struct Window {
     #[template_child]
-    pub button: TemplateChild<Button>,
+    pub button: TemplateChild<LockSwayToggle>,
     #[template_child]
     pub button_label: TemplateChild<Label>,
+}
+
+#[gtk::template_callbacks]
+impl Window {
+    #[template_callback]
+    fn handle_button_clicked(&self, _button: &LockSwayToggle) {
+        // Set the label to "Hello World!" after the button has been clicked on
+        self.button_label.set_label("")
+    }
 }
 
 // The central trait for subclassing a GObject
@@ -23,6 +34,7 @@ impl ObjectSubclass for Window {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
+        klass.bind_template_callbacks();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -35,12 +47,6 @@ impl ObjectImpl for Window {
     fn constructed(&self, obj: &Self::Type) {
         // Call "constructed" on parent
         self.parent_constructed(obj);
-
-        // Connect to "clicked" signal of `button`
-        self.button.connect_clicked(move |button| {
-            // Set the label to "Hello World!" after the button has been clicked on
-            button.set_label("Hello World!");
-        });
     }
 }
 
