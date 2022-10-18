@@ -5,11 +5,11 @@ use gtk::prelude::*;
 use gtk::{gio, Application};
 use window::Window;
 
-const APP_ID: &str = "org.gtk_rs.CompositeTemplates1";
+const APP_ID: &str = "org.gtk_rs.SwayMenu";
 
 fn main() {
     // Register and include resources
-    gio::resources_register_include!("composite_templates_1.gresource")
+    gio::resources_register_include!("swaymenu.gresource")
         .expect("Failed to register resources.");
 
     // Create a new application
@@ -21,6 +21,7 @@ fn main() {
     // Run the application
     app.run();
 }
+
 fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);

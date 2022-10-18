@@ -1,7 +1,7 @@
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{glib, Button, CompositeTemplate, Label};
+use gtk::{glib, CompositeTemplate, Label};
 
 use crate::custom_widgets::LockSwayToggle;
 
@@ -19,8 +19,7 @@ pub struct Window {
 impl Window {
     #[template_callback]
     fn handle_button_clicked(&self, _button: &LockSwayToggle) {
-        // Set the label to "Hello World!" after the button has been clicked on
-        self.button_label.set_label("")
+
     }
 }
 
@@ -47,6 +46,7 @@ impl ObjectImpl for Window {
     fn constructed(&self, obj: &Self::Type) {
         // Call "constructed" on parent
         self.parent_constructed(obj);
+        obj.setup_lock_button()
     }
 }
 

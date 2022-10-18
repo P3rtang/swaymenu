@@ -6,25 +6,14 @@
         <child>
             <object class="GtkGrid" id="main_grid">
                 <child>
-                    <object class="GtkLabel">
-                        <property name="label">Testing</property>
-                        <property name="margin-top">12</property>
-                        <property name="margin-bottom">12</property>
-                        <property name="margin-start">12</property>
-                        <property name="margin-end">12</property>
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">0</property>
-                        </layout>
-                    </object>
-                </child>
-                <child>
                     <object class="SwayMenuLockSwayToggle" id="button">
-                        <signal name="clicked" handler="handle_button_clicked" swapped="true"/>
+                        <property name="action-name">win.lockToggle</property>
+                        <property name="action-target">1</property>
                         <child>
                             <object class="GtkLabel" id="button_label">
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
+
                                 <attributes>
                                     <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
                                 </attributes>
@@ -34,6 +23,8 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
+                        <property name="width-request">80</property>
+                        <property name="height-request">80</property>
                         <layout>
                             <property name="column">0</property>
                             <property name="row">1</property>
