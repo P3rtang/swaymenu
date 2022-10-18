@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
     <template class="MyGtkAppWindow" parent="GtkApplicationWindow">
-        <property name="title">My GTK App</property>
+        <property name="opacity">0.85</property>
+        <property name="focus-visible">False</property>
         <property name="resizable">False</property>
         <child>
             <object class="GtkGrid" id="main_grid">

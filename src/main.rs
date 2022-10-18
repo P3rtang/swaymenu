@@ -18,6 +18,9 @@ fn main() {
     // Connect to "activate" signal of `app`
     app.connect_activate(build_ui);
 
+    // Pressing escape closes the menu
+    app.set_accels_for_action("window.close", &["Escape"]);
+
     // Run the application
     app.run();
 }
@@ -26,4 +29,6 @@ fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);
     window.present();
+    window.set_height_request(1440);
+    window.set_width_request(2560);
 }

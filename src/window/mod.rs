@@ -22,6 +22,7 @@ impl Window {
     }
     fn setup_lock_button(&self) {
         let button = self.imp().button.get();
+        button.set_opacity(1.0);
         let label = self.imp().button_label.get();
         let mut original_state = 0;
 
