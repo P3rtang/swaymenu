@@ -21,3 +21,22 @@ impl Default for LockSwayToggle {
         Self::new()
     }
 }
+
+glib::wrapper! {
+    pub struct ExitSway(ObjectSubclass<imp::ExitSway>)
+        @extends gtk::Button, gtk::Widget,
+        @implements gtk::Accessible, gtk::Actionable,
+                    gtk::Buildable, gtk::ConstraintTarget;
+}
+
+impl ExitSway {
+    pub fn new() -> Self {
+        Object::new(&[]).expect("Failed to create `ExitSway button`.")
+    }
+}
+
+impl Default for ExitSway {
+    fn default() -> Self {
+        Self::new()
+    }
+}

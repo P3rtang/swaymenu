@@ -2,8 +2,9 @@ use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{glib, CompositeTemplate, Label};
+use std::process::Command;
 
-use crate::custom_widgets::LockSwayToggle;
+use crate::custom_widgets::{ExitSway, LockSwayToggle};
 
 // Object holding the state
 #[derive(CompositeTemplate, Default)]
@@ -13,14 +14,8 @@ pub struct Window {
     pub button: TemplateChild<LockSwayToggle>,
     #[template_child]
     pub button_label: TemplateChild<Label>,
-}
-
-#[gtk::template_callbacks]
-impl Window {
-    #[template_callback]
-    fn handle_button_clicked(&self, _button: &LockSwayToggle) {
-
-    }
+    #[template_child]
+    pub exit_button: TemplateChild<ExitSway>,
 }
 
 // The central trait for subclassing a GObject
@@ -33,7 +28,6 @@ impl ObjectSubclass for Window {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
-        klass.bind_template_callbacks();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -46,7 +40,11 @@ impl ObjectImpl for Window {
     fn constructed(&self, obj: &Self::Type) {
         // Call "constructed" on parent
         self.parent_constructed(obj);
-        obj.setup_lock_button()
+        obj.setup_lock_button();
+
+        self.exit_button.connect_clicked(move |_| {
+            Command::new("swaymsg").arg("exit").output().expect("unable to exit sway");
+        });
     }
 }
 
