@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
     <template class="MyGtkAppWindow" parent="GtkApplicationWindow">
-        <property name="opacity">0.85</property>
-        <property name="focus-visible">False</property>
         <property name="resizable">False</property>
+        <property name="opacity">0.9</property>
         <child>
             <object class="GtkGrid" id="main_grid">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
                 <child>
                     <object class="SwayMenuLockSwayToggle" id="button">
                         <property name="action-name">win.lockToggle</property>
@@ -51,6 +52,29 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">1</property>
+                            <property name="row">0</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="shutdown_button">
+                        <child>
+                            <object class="GtkLabel" id="shutdown_button_label">
+                                <property name="can-focus">False</property>
+                                <property name="label"></property>
+                                <attributes>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
+                                </attributes>
+                            </object>
+                        </child>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="width-request">80</property>
+                        <property name="height-request">80</property>
+                        <layout>
+                            <property name="column">2</property>
                             <property name="row">0</property>
                         </layout>
                     </object>

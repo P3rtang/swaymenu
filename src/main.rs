@@ -29,6 +29,4 @@ fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);
     window.present();
-    window.set_height_request(1440);
-    window.set_width_request(2560);
 }

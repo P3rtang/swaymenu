@@ -1,7 +1,7 @@
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, Label};
+use gtk::{glib, CompositeTemplate, Label, Button};
 use std::process::Command;
 
 use crate::custom_widgets::{ExitSway, LockSwayToggle};
@@ -16,6 +16,8 @@ pub struct Window {
     pub button_label: TemplateChild<Label>,
     #[template_child]
     pub exit_button: TemplateChild<ExitSway>,
+    #[template_child]
+    pub shutdown_button: TemplateChild<Button>
 }
 
 // The central trait for subclassing a GObject
@@ -44,6 +46,10 @@ impl ObjectImpl for Window {
 
         self.exit_button.connect_clicked(move |_| {
             Command::new("swaymsg").arg("exit").output().expect("unable to exit sway");
+        });
+        self.shutdown_button.connect_clicked(move |_| {
+            println!("Shutting down system");
+            Command::new("systemctl").arg("shutdown").output().expect("unable to shutdown");
         });
     }
 }
