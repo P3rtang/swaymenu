@@ -1,0 +1,8 @@
+button.warning_button_clicked {
+  background: red;
+  color: grey;
+}
+button.warning_button:hover {
+  background: red;
+  color: grey;
+}

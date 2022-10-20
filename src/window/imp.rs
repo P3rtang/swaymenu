@@ -11,7 +11,9 @@ use crate::custom_widgets::{ExitSway, LockSwayToggle};
 #[template(resource = "/org/gtk_rs/example/MainWindow.ui")]
 pub struct Window {
     #[template_child]
-    pub button: TemplateChild<LockSwayToggle>,
+    pub start_win_vm: TemplateChild<Button>,
+    #[template_child]
+    pub lock_button: TemplateChild<LockSwayToggle>,
     #[template_child]
     pub button_label: TemplateChild<Label>,
     #[template_child]
@@ -43,13 +45,21 @@ impl ObjectImpl for Window {
         // Call "constructed" on parent
         self.parent_constructed(obj);
         obj.setup_lock_button();
+        obj.setup_exit_button();
 
-        self.exit_button.connect_clicked(move |_| {
-            Command::new("swaymsg").arg("exit").output().expect("unable to exit sway");
-        });
-        self.shutdown_button.connect_clicked(move |_| {
+        self.exit_button.add_css_class("warning_button");
+        self.shutdown_button.add_css_class("warning_button");
+
+        self.shutdown_button.connect_clicked(move |this| {
+            this.add_css_class("warning_button_clicked");
             println!("Shutting down system");
-            Command::new("systemctl").arg("shutdown").output().expect("unable to shutdown");
+            Command::new("systemctl").arg("poweroff").output().expect("unable to shutdown");
+        });
+
+        self.start_win_vm.connect_clicked(move |_| {
+            println!("startign vm");
+            let _start_vm_command = Command::new("sh").current_dir("scripts").arg("start_vm.sh")
+                .spawn().expect("unable to start win11 vm");
         });
     }
 }

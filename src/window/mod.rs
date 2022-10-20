@@ -20,10 +20,12 @@ impl Window {
         // Create new window
         Object::new(&[("application", app)]).expect("Failed to create Window")
     }
+    // implement lock button
     fn setup_lock_button(&self) {
-        let button = self.imp().button.get();
-        button.set_opacity(1.0);
+        let lock_button = self.imp().lock_button.get();
         let label = self.imp().button_label.get();
+
+        let _shutdown_clicked_state = 0;
         let mut original_state = 0;
 
         let current_lock_state = Command::new("ps").arg("-ef").output().expect("failed to execute command");
@@ -44,7 +46,7 @@ impl Window {
             &original_state.to_variant(),
         );
 
-        action_lock_toggle.connect_activate(clone!(@weak button => move |action, parameter| {
+        action_lock_toggle.connect_activate(clone!(@weak lock_button => move |action, parameter| {
             // Get state
             let mut state = action.state().expect("Could not get state.").get::<i32>().expect("The value needs to be of type `i32`.");
             // Get parameter
@@ -58,12 +60,35 @@ impl Window {
             // Update label with new state
             if state == 0 {
                 label.set_label("");
-                Command::new("sh").arg("/home/p3rtang/.config/waybar/swayidle.sh").spawn().expect("failed to execute process")
+                Command::new("sh").arg("scripts/swayidle.sh").spawn().expect("failed to execute process")
             } else {
                 label.set_label("");
                 Command::new("killall").arg("swayidle").spawn().expect("failed to execute process")
             };
         }));
         self.add_action(&action_lock_toggle);
+    }
+    // implement sway exit button
+    fn setup_exit_button(&self) {
+        let exit_button = self.imp().exit_button.get();
+        let exit_clicked_state = 0;
+
+        let action_exit_sway = SimpleAction::new_stateful(
+            "exitSway",
+            Some(&i32::static_variant_type()),
+            &exit_clicked_state.to_variant()
+        );
+
+        action_exit_sway.connect_activate(clone!(@weak exit_button => move |action, _| {
+            let exit_state = action.state().expect("Could not get state.").get::<i32>().expect("The value needs to be of type `i32`.");
+            println!("{}", exit_state);
+            if exit_state == 0 {
+                exit_button.add_css_class("warning_button_clicked");
+                action.set_state(&1.to_variant());
+            } else {
+                Command::new("swaymsg").arg("exit").output().expect("unable to exit sway");
+            }
+        }));
+        self.add_action(&action_exit_sway);
     }
 }
