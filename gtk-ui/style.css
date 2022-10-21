@@ -1,8 +1,77 @@
-button.warning_button_clicked {
-  background: red;
-  color: grey;
-}
+@define-color background rgba(100, 114, 125, 1);
+@define-color blue rgba(139, 233, 253, 1);
+@define-color green rgba(80, 250, 123, 1);
+@define-color orange rgba(255, 184, 108, 1);
+@define-color magenta rgba(255, 121, 198, 1);
+@define-color bright-red rgba(255, 149, 128, 1);
+@define-color yellow rgba(241, 250, 140, 1);
+@define-color purple rgba(189, 147, 249, 1);
+
 button.warning_button:hover {
-  background: red;
-  color: grey;
+  background: @bright-red;
+  color: @background;
+}
+button.warning_button {
+    color: @bright-red;
+}
+button.warning_button_clicked {
+  background: @bright-red;
+  color: @background;
+}
+window {
+    background: rgba(40, 42, 54, 0.9);
+}
+/* windows vm button */
+#start_win_vm {
+    color: @blue;
+}
+#start_win_vm:hover {
+    background: @blue;
+    color: @background;
+}
+/* sway lock button */
+/* closed */
+#lock_button.lock-closed {
+    color: @orange;
+}
+#lock_button.lock-closed:hover {
+    background: @orange;
+    color: @background;
+}
+/* open */
+#lock_button.lock-open {
+    color: @green;
+}
+#lock_button.lock-open:hover {
+    background: @green;
+    color: @background;
+}
+/* brightness */
+/* low */
+#brightness_button.low {
+    color: @purple;
+}
+#brightness_button.low:hover {
+    color: @background;
+    background: @purple;
+}
+/* high */
+#brightness_button.high {
+    color: @yellow;
+}
+#brightness_button.high:hover {
+    color: @background;
+    background: @yellow;
+}
+/* every button */
+button {
+    border: transparent;
+    background: rgba(100, 114, 125, 1);
+}
+/* info label */
+#info_label {
+    color: @background;
+}
+#info_label.warning_hover {
+    color: @bright-red;
 }

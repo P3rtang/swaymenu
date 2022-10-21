@@ -4,38 +4,19 @@ use gtk::glib;
 mod imp;
 
 glib::wrapper! {
-    pub struct LockSwayToggle(ObjectSubclass<imp::LockSwayToggle>)
+    pub struct LockButton(ObjectSubclass<imp::LockButton>)
         @extends gtk::Button, gtk::Widget,
         @implements gtk::Accessible, gtk::Actionable,
                     gtk::Buildable, gtk::ConstraintTarget;
 }
 
-impl LockSwayToggle {
+impl LockButton {
     pub fn new() -> Self {
         Object::new(&[]).expect("Failed to create `SwayLockToggle`.")
     }
 }
 
-impl Default for LockSwayToggle {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-glib::wrapper! {
-    pub struct ExitSway(ObjectSubclass<imp::ExitSway>)
-        @extends gtk::Button, gtk::Widget,
-        @implements gtk::Accessible, gtk::Actionable,
-                    gtk::Buildable, gtk::ConstraintTarget;
-}
-
-impl ExitSway {
-    pub fn new() -> Self {
-        Object::new(&[]).expect("Failed to create `ExitSway button`.")
-    }
-}
-
-impl Default for ExitSway {
+impl Default for LockButton {
     fn default() -> Self {
         Self::new()
     }

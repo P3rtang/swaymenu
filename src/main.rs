@@ -30,8 +30,10 @@ fn main() {
 fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);
+    // window.add_css_class("window");
     window.present();
-    window.grab_focus();
+    window.set_height_request(1440);
+    window.set_width_request(2560);
 }
 
 fn load_css() {

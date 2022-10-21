@@ -2,13 +2,13 @@
 <interface>
     <template class="MyGtkAppWindow" parent="GtkApplicationWindow">
         <property name="resizable">False</property>
-        <property name="opacity">0.9</property>
         <child>
             <object class="GtkGrid" id="main_grid">
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <child>
                     <object class="GtkButton" id="start_win_vm">
+                        <property name="name">start_win_vm</property>
                         <child>
                             <object class="GtkLabel">
                                 <property name="can-focus">False</property>
@@ -31,11 +31,11 @@
                     </object>
                 </child>
                 <child>
-                    <object class="SwayMenuLockSwayToggle" id="lock_button">
-                        <property name="action-name">win.lockToggle</property>
-                        <property name="action-target">1</property>
+                    <object class="CustomLockButton" id="lock_button">
+                        <signal name="clicked" handler="handle_button_clicked" swapped="true"/>
+                        <property name="name">lock_button</property>
                         <child>
-                            <object class="GtkLabel" id="button_label">
+                            <object class="GtkLabel" id="lock_label">
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
@@ -56,9 +56,31 @@
                     </object>
                 </child>
                 <child>
-                    <object class="SwayMenuExitSway" id="exit_button">
-                        <property name="action-name">win.exitSway</property>
-                        <property name="action-target">1</property>
+                    <object class="GtkButton" id="brightness_button">
+                        <property name="name">brightness_button</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="can-focus">False</property>
+                                <property name="label"></property>
+                                <attributes>
+                                    <attribute name="font-desc" value="Font Awesome 6 Free 45"/>
+                                </attributes>
+                            </object>
+                        </child>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="width-request">80</property>
+                        <property name="height-request">80</property>
+                        <layout>
+                            <property name="column">2</property>
+                            <property name="row">0</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="exit_button">
                         <child>
                             <object class="GtkLabel" id="exit_button_label">
                                 <property name="can-focus">False</property>
@@ -75,8 +97,31 @@
                         <property name="width-request">80</property>
                         <property name="height-request">80</property>
                         <layout>
-                            <property name="column">2</property>
-                            <property name="row">0</property>
+                            <property name="column">0</property>
+                            <property name="row">1</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="reboot_button">
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="can-focus">False</property>
+                                <property name="label"></property>
+                                <attributes>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
+                                </attributes>
+                            </object>
+                        </child>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="width-request">80</property>
+                        <property name="height-request">80</property>
+                        <layout>
+                            <property name="column">1</property>
+                            <property name="row">1</property>
                         </layout>
                     </object>
                 </child>
@@ -99,8 +144,37 @@
                         <property name="width-request">80</property>
                         <property name="height-request">80</property>
                         <layout>
-                            <property name="column">3</property>
-                            <property name="row">0</property>
+                            <property name="column">2</property>
+                            <property name="row">1</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="spacer">
+                        <property name="can-focus">False</property>
+                        <attributes>
+                            <attribute name="font-desc" value="Font Awesome 5 Free Brands 15"/>
+                        </attributes>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">2</property>
+                            <property name="column-span">3</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="info_label">
+                        <property name="can-focus">False</property>
+                        <property name="name">info_label</property>
+                        <property name="height-request">80</property>
+                        <property name="justify">center</property>
+                        <attributes>
+                            <attribute name="font-desc" value="Font Awesome 5 Free Brands 18"/>
+                        </attributes>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">3</property>
+                            <property name="column-span">3</property>
                         </layout>
                     </object>
                 </child>

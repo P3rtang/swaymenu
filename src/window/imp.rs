@@ -1,10 +1,19 @@
+#![allow(unused_imports)]
+
+use std::cell::Cell;
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, Label, Button};
+use gtk::{glib, CompositeTemplate, Label, Button, Frame, Viewport, Grid, AspectFrame, EventController, EventControllerMotion};
 use std::process::Command;
+use std::ptr::NonNull;
+use std::thread;
+use std::time::Duration;
+use gio::glib::{clone, Type};
+use gio::glib::subclass::TypeData;
+use gtk::ffi::{GtkEventController, GtkEventControllerMotion, GtkEventControllerMotionClass};
 
-use crate::custom_widgets::{ExitSway, LockSwayToggle};
+use crate::custom_widgets::{LockButton};
 
 // Object holding the state
 #[derive(CompositeTemplate, Default)]
@@ -13,13 +22,22 @@ pub struct Window {
     #[template_child]
     pub start_win_vm: TemplateChild<Button>,
     #[template_child]
-    pub lock_button: TemplateChild<LockSwayToggle>,
+    pub lock_button: TemplateChild<LockButton>,
     #[template_child]
-    pub button_label: TemplateChild<Label>,
+    pub lock_label: TemplateChild<Label>,
+    pub lock_state: Cell<i32>,
     #[template_child]
-    pub exit_button: TemplateChild<ExitSway>,
+    pub exit_button: TemplateChild<Button>,
     #[template_child]
-    pub shutdown_button: TemplateChild<Button>
+    pub exit_button_label: TemplateChild<Label>,
+    #[template_child]
+    pub shutdown_button: TemplateChild<Button>,
+    #[template_child]
+    pub reboot_button: TemplateChild<Button>,
+    #[template_child]
+    pub info_label: TemplateChild<Label>,
+    #[template_child]
+    pub brightness_button: TemplateChild<Button>,
 }
 
 // The central trait for subclassing a GObject
@@ -32,6 +50,8 @@ impl ObjectSubclass for Window {
 
     fn class_init(klass: &mut Self::Class) {
         klass.bind_template();
+        klass.bind_template_callbacks();
+        LockButton::ensure_type();
     }
 
     fn instance_init(obj: &InitializingObject<Self>) {
@@ -46,23 +66,38 @@ impl ObjectImpl for Window {
         self.parent_constructed(obj);
         obj.setup_lock_button();
         obj.setup_exit_button();
+        obj.setup_win_vm_button();
+        obj.setup_shutdown_button();
+        obj.setup_reboot_button();
+        obj.setup_brightness_button();
 
         self.exit_button.add_css_class("warning_button");
         self.shutdown_button.add_css_class("warning_button");
-
-        self.shutdown_button.connect_clicked(move |this| {
-            this.add_css_class("warning_button_clicked");
-            println!("Shutting down system");
-            Command::new("systemctl").arg("poweroff").output().expect("unable to shutdown");
-        });
-
-        self.start_win_vm.connect_clicked(move |_| {
-            println!("startign vm");
-            let _start_vm_command = Command::new("sh").current_dir("scripts").arg("start_vm.sh")
-                .spawn().expect("unable to start win11 vm");
-        });
+        self.reboot_button.add_css_class("warning_button");
     }
 }
+#[gtk::template_callbacks]
+impl Window {
+    #[template_callback]
+    fn handle_button_clicked(&self, button: &LockButton) {
+        // Increase state by parameter and save state
+        self.lock_state.set((self.lock_state.get() + 1) % 2);
+
+        // Update label with new state
+        if self.lock_state.get() == 1 {
+            button.set_css_classes(&["lock-closed"]);
+            self.lock_label.set_label("");
+            self.info_label.set_label("Screen Timeout\nON");
+            Command::new("sh").arg("scripts/swayidle.sh").spawn().expect("failed to execute process")
+        } else {
+            button.set_css_classes(&["lock-open"]);
+            self.lock_label.set_label("");
+            self.info_label.set_label("Screen Timeout\nOFF");
+            Command::new("killall").arg("swayidle").spawn().expect("failed to execute process")
+        };
+    }
+}
+
 
 // Trait shared by all widgets
 impl WidgetImpl for Window {}
