@@ -8,6 +8,7 @@ use gtk::{glib, CompositeTemplate, Label, Button, Frame, Viewport, Grid, AspectF
 use std::process::Command;
 use std::ptr::NonNull;
 use std::thread;
+use std::thread::sleep;
 use std::time::Duration;
 use gio::glib::{clone, Type};
 use gio::glib::subclass::TypeData;

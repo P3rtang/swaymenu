@@ -1,10 +1,12 @@
 mod window;
 mod custom_widgets;
 
+use std::thread::sleep;
+use std::time::Duration;
 use gtk::prelude::*;
 use gtk::{gio, Application, CssProvider, StyleContext};
 use window::Window;
-use gtk::gdk::Display;
+use gtk::gdk::{Display};
 
 const APP_ID: &str = "org.gtk_rs.SwayMenu";
 
@@ -30,10 +32,10 @@ fn main() {
 fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);
-    // window.add_css_class("window");
     window.present();
     window.set_height_request(1440);
     window.set_width_request(2560);
+    window.add_css_class("window");
 }
 
 fn load_css() {

@@ -7,14 +7,14 @@
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <child>
-                    <object class="GtkButton" id="start_win_vm">
-                        <property name="name">start_win_vm</property>
+                    <object class="GtkButton" id="brightness_button">
+                        <property name="name">brightness_button</property>
                         <child>
                             <object class="GtkLabel">
                                 <property name="can-focus">False</property>
-                                <property name="label"></property>
+                                <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 5 Free Brands 40"/>
+                                    <attribute name="font-desc" value="Font Awesome 6 Free 45"/>
                                 </attributes>
                             </object>
                         </child>
@@ -56,14 +56,14 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkButton" id="brightness_button">
-                        <property name="name">brightness_button</property>
+                    <object class="GtkButton" id="start_win_vm">
+                        <property name="name">start_win_vm</property>
                         <child>
                             <object class="GtkLabel">
                                 <property name="can-focus">False</property>
-                                <property name="label"></property>
+                                <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 6 Free 45"/>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Brands 40"/>
                                 </attributes>
                             </object>
                         </child>

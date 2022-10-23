@@ -33,7 +33,6 @@ impl Window {
         for out_item in String::from_utf8(current_lock_state.stdout) {
             if out_item.contains("swayidle") { sway_idle_count += 1 }
         }
-        println!("{}", sway_idle_count);
         if sway_idle_count != 0 {
             lock_label.set_label("");
             lock_button.set_css_classes(&["lock-closed"]);
@@ -93,7 +92,6 @@ impl Window {
 
         shutdown_button.connect_clicked(move |this| {
             this.add_css_class("warning_button_clicked");
-            println!("Shutting down system");
             Command::new("systemctl").arg("poweroff").output().expect("unable to shutdown");
         });
     }
@@ -113,7 +111,6 @@ impl Window {
 
         // connecting the button signal on click
         win_button.connect_clicked(move |_| {
-            println!("starting vm");
             thread::spawn(move || {
                 Command::new("sh").arg("/home/p3rtang/IdeaProjects/swaymenu/scripts/start_vm.sh")
                     .output().expect("unable to start win11 vm");
