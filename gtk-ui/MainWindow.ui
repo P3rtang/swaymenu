@@ -39,7 +39,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Solid 40"/>
                                 </attributes>
                             </object>
                         </child>
@@ -86,7 +86,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Solid 40"/>
                                 </attributes>
                             </object>
                         </child>
@@ -109,7 +109,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Solid 40"/>
                                 </attributes>
                             </object>
                         </child>
@@ -133,7 +133,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 5 Free Heavy 40"/>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Solid 40"/>
                                 </attributes>
                             </object>
                         </child>

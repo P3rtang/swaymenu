@@ -1,7 +1,5 @@
-use gtk::gio;
-
 fn main() {
-    gio::compile_resources(
+    glib_build_tools::compile_resources(
         "gtk-ui",
         "gtk-ui/gresource.xml",
         "swaymenu.gresource",

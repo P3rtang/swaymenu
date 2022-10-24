@@ -5,8 +5,8 @@ use std::thread::sleep;
 use std::time::Duration;
 use gtk::prelude::*;
 use gtk::{gio, Application, CssProvider, StyleContext};
+use gtk::gdk::{Display, Toplevel, ToplevelSize};
 use window::Window;
-use gtk::gdk::{Display};
 
 const APP_ID: &str = "org.gtk_rs.SwayMenu";
 
@@ -17,7 +17,6 @@ fn main() {
 
     // Create a new application
     let app = Application::builder().application_id(APP_ID).build();
-
     // Connect to signals
     app.connect_startup(|_| load_css());
     app.connect_activate(build_ui);
@@ -33,8 +32,8 @@ fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);
     window.present();
-    window.set_height_request(1440);
-    window.set_width_request(2560);
+    window.set_height_request(1080);
+    window.set_width_request(1920);
     window.add_css_class("window");
 }
 
