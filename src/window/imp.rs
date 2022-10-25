@@ -62,9 +62,11 @@ impl ObjectSubclass for Window {
 
 // Trait shared by all GObjects
 impl ObjectImpl for Window {
-    fn constructed(&self, obj: &Self::Type) {
+    fn constructed(&self) {
         // Call "constructed" on parent
-        self.parent_constructed(obj);
+        self.parent_constructed();
+
+        let obj = self.obj();
         obj.setup_lock_button();
         obj.setup_exit_button();
         obj.setup_win_vm_button();

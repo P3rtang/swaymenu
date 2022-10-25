@@ -12,7 +12,7 @@ glib::wrapper! {
 
 impl LockButton {
     pub fn new() -> Self {
-        Object::new(&[]).expect("Failed to create `SwayLockToggle`.")
+        Object::new::<LockButton>(&[])
     }
 }
 
