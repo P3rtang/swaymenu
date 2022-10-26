@@ -1,11 +1,9 @@
 mod window;
 mod custom_widgets;
 
-use std::thread::sleep;
-use std::time::Duration;
 use gtk::prelude::*;
 use gtk::{gio, Application, CssProvider, StyleContext};
-use gtk::gdk::{Display, Toplevel, ToplevelSize};
+use gtk::gdk::{Display, prelude::MonitorExt};
 use window::Window;
 
 const APP_ID: &str = "org.gtk_rs.SwayMenu";
@@ -32,8 +30,12 @@ fn build_ui(app: &Application) {
     // Create new window and present it
     let window = Window::new(app);
     window.present();
-    window.set_height_request(1080);
-    window.set_width_request(1920);
+
+    let display = Display::default().expect("Could not connect to a display");
+    let geometry = display.monitor_at_surface(&window.surface()).geometry();
+    window.set_height_request(geometry.height());
+    window.set_width_request(geometry.width());
+
     window.add_css_class("window");
 }
 

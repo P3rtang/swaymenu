@@ -8,7 +8,6 @@ edition = "2021"
 [dependencies]
 gio = "0.16.2"
 gtk = { version = "*", package = "gtk4" }
-gdk = { git = "https://github.com/gtk-rs/gtk3-rs.git", package = "gdk" }
 
 [build-dependencies]
 glib-build-tools = "0.16.0"
