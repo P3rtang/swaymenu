@@ -3,7 +3,7 @@ mod custom_widgets;
 
 use gtk::prelude::*;
 use gtk::{gio, Application, CssProvider, StyleContext};
-use gtk::gdk::{Display, prelude::MonitorExt};
+use gtk::gdk::{Display};
 use window::Window;
 
 const APP_ID: &str = "org.gtk_rs.SwayMenu";
