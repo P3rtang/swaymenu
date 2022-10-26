@@ -1,12 +1,11 @@
 mod imp;
 
-use glib::{Object, clone};
+use glib::{Object, clone, timeout_future_seconds};
 use gtk::subclass::prelude::*;
 use gtk::prelude::*;
 use gtk::{gio, glib, Application, EventControllerMotion};
 use std::process::Command;
-use std::thread;
-use std::time::Duration;
+use gio::glib::MainContext;
 
 
 glib::wrapper! {
@@ -99,6 +98,7 @@ impl Window {
         let controller = EventControllerMotion::new();
         let info_label = self.imp().info_label.get();
         let win_button = self.imp().start_win_vm.get();
+        let spinner = self.imp().spinner.get();
 
         // adding a widget controller to show info on hover
         win_button.add_controller(&controller);
@@ -111,13 +111,21 @@ impl Window {
 
         // connecting the button signal on click
         win_button.connect_clicked(move |_| {
-            thread::spawn(move || {
-                Command::new("sh").arg("/home/p3rtang/IdeaProjects/swaymenu/scripts/start_vm.sh")
-                    .output().expect("unable to start win11 vm");
-                let five_seconds = Duration::from_secs(8);
-                thread::sleep(five_seconds);
+            info_label.hide();
+            let main_context = MainContext::default();
+            main_context.spawn_local(clone!(@weak spinner, @weak info_label => async move {
+                spinner.start();
+
+                let mut win_start_command = Command::new("sh").arg("/home/p3rtang/IdeaProjects/swaymenu/scripts/start_vm.sh").spawn().expect("unable to start win11 vm");
+                // wait for the command to exit in a non blocking way
+                while win_start_command.try_wait().unwrap() == None {
+                    timeout_future_seconds(1).await;
+                }
+                timeout_future_seconds(8).await;
                 Command::new("ddcutil").arg("setvcp").arg("60").arg("0x0f").output().unwrap();
-            });
+                spinner.stop();
+                info_label.show();
+            }));
         });
     }
     fn setup_reboot_button(&self) {

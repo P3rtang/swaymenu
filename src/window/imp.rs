@@ -4,7 +4,7 @@ use std::cell::Cell;
 use glib::subclass::InitializingObject;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
-use gtk::{glib, CompositeTemplate, Label, Button, Frame, Viewport, Grid, AspectFrame, EventController, EventControllerMotion};
+use gtk::{glib, CompositeTemplate, Label, Button, Frame, Viewport, Grid, AspectFrame, EventController, EventControllerMotion, Spinner};
 use std::process::Command;
 use std::ptr::NonNull;
 use std::thread;
@@ -39,6 +39,8 @@ pub struct Window {
     pub info_label: TemplateChild<Label>,
     #[template_child]
     pub brightness_button: TemplateChild<Button>,
+    #[template_child]
+    pub spinner: TemplateChild<Spinner>,
 }
 
 // The central trait for subclassing a GObject

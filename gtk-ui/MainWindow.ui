@@ -7,6 +7,19 @@
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <child>
+                    <object class="GtkLabel">
+                        <property name="can-focus">False</property>
+                        <attributes>
+                            <attribute name="font-desc" value="Font Awesome 5 Free Brands 50"/>
+                        </attributes>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">0</property>
+                            <property name="column-span">3</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
                     <object class="GtkButton" id="brightness_button">
                         <property name="name">brightness_button</property>
                         <child>
@@ -26,7 +39,7 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">0</property>
-                            <property name="row">0</property>
+                            <property name="row">1</property>
                         </layout>
                     </object>
                 </child>
@@ -51,7 +64,7 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">1</property>
-                            <property name="row">0</property>
+                            <property name="row">1</property>
                         </layout>
                     </object>
                 </child>
@@ -75,7 +88,7 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">2</property>
-                            <property name="row">0</property>
+                            <property name="row">1</property>
                         </layout>
                     </object>
                 </child>
@@ -98,7 +111,7 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">0</property>
-                            <property name="row">1</property>
+                            <property name="row">2</property>
                         </layout>
                     </object>
                 </child>
@@ -121,7 +134,7 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">1</property>
-                            <property name="row">1</property>
+                            <property name="row">2</property>
                         </layout>
                     </object>
                 </child>
@@ -145,19 +158,22 @@
                         <property name="height-request">80</property>
                         <layout>
                             <property name="column">2</property>
-                            <property name="row">1</property>
+                            <property name="row">2</property>
                         </layout>
                     </object>
                 </child>
                 <child>
-                    <object class="GtkLabel" id="spacer">
+                    <object class="GtkSpinner" id="spinner">
                         <property name="can-focus">False</property>
-                        <attributes>
-                            <attribute name="font-desc" value="Font Awesome 5 Free Brands 15"/>
-                        </attributes>
+                        <property name="width-request">40</property>
+                        <property name="height-request">40</property>
+                        <property name="margin-top">20</property>
+                        <property name="margin-bottom">20</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
                         <layout>
                             <property name="column">0</property>
-                            <property name="row">2</property>
+                            <property name="row">3</property>
                             <property name="column-span">3</property>
                         </layout>
                     </object>
