@@ -39,6 +39,7 @@ pub struct Window {
     pub info_label: TemplateChild<Label>,
     #[template_child]
     pub brightness_button: TemplateChild<Button>,
+    pub brightness: Cell<f32>,
     #[template_child]
     pub spinner: TemplateChild<Spinner>,
 }
