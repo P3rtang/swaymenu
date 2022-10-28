@@ -163,10 +163,15 @@ impl Window {
         let brightness_button = self.imp().brightness_button.get();
 
         let brightness_vec = Command::new("ddcutil").arg("getvcp").arg("10").output().unwrap().stdout;
+        self.imp().brightness.set(100.0);
 
         if let Ok(out)= String::from_utf8(brightness_vec) {
             let out_vec = out.split_ascii_whitespace().collect::<Vec<&str>>();
-            self.imp().brightness.set(out_vec[8].replace(',', "").parse::<f32>().unwrap());
+            if let Ok(brightness_float) = out_vec[8].replace(',', "").parse::<f32>() {
+                self.imp().brightness.set(brightness_float)
+            } else {
+                brightness_button.set_sensitive(false);
+            }
         }
         brightness_set_css(&brightness_button, self.imp().brightness.get());
         // adding a widget controller to show info on hover
