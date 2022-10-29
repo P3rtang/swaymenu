@@ -1,5 +1,8 @@
 mod imp;
 
+use std::fs;
+use std::io::Write;
+use std::path::Path;
 use glib::{Object, clone, timeout_future_seconds};
 use gtk::subclass::prelude::*;
 use gtk::prelude::*;
@@ -162,38 +165,69 @@ impl Window {
         let info_label = self.imp().info_label.get();
         let brightness_button = self.imp().brightness_button.get();
 
-        let brightness_vec = Command::new("ddcutil").arg("getvcp").arg("10").output().unwrap().stdout;
-        self.imp().brightness.set(100.0);
+        let brightness_class_dir = Path::new("/sys/class/backlight/").is_dir();
 
-        if let Ok(out)= String::from_utf8(brightness_vec) {
+        let brightness_vec = Command::new("ddcutil").arg("getvcp").arg("10").output().unwrap();
+        self.imp().brightness.set(100.0);
+        if brightness_class_dir {
+            let max = fs::read_to_string("/sys/class/backlight/intel_backlight/max_brightness")
+                .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
+            let current = fs::read_to_string("/sys/class/backlight/intel_backlight/brightness")
+                .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
+            self.imp().brightness.set((current / max * 100.0).ceil());
+            brightness_set_css(&brightness_button, current / max * 100.0);
+            brightness_button.add_controller(&controller);
+            controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
+                info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get().ceil()))
+            }));
+            controller.connect_leave(clone!(@weak info_label => move |_| {
+                info_label.set_label("");
+            }));
+            brightness_button.connect_clicked(clone!(@weak info_label, @weak brightness_button, @weak self as window => move |_| {
+                if window.imp().brightness.get() < 20.0 {
+                    window.imp().brightness.set(100.0)
+                } else if window.imp().brightness.get() < 21.0 {
+                    window.imp().brightness.set(1.0)
+                } else {
+                    window.imp().brightness.set(window.imp().brightness.get() - 20.0)
+                }
+                info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get().ceil()));
+                brightness_set_css(&brightness_button, window.imp().brightness.get());
+
+                let mut f = fs::OpenOptions::new().write(true).open("/sys/class/backlight/intel_backlight/brightness").unwrap();
+                f.write_all(format!("{}", (window.imp().brightness.get() / 100.0 * max) as i32).as_bytes()).unwrap();
+                f.flush().unwrap();
+
+            }));
+        } else if let Ok(out)= String::from_utf8(brightness_vec.stdout) {
             let out_vec = out.split_ascii_whitespace().collect::<Vec<&str>>();
             if let Ok(brightness_float) = out_vec[8].replace(',', "").parse::<f32>() {
-                self.imp().brightness.set(brightness_float)
+                self.imp().brightness.set(brightness_float);
+                brightness_set_css(&brightness_button, self.imp().brightness.get());
+                // adding a widget controller to show info on hover
+                brightness_button.add_controller(&controller);
+                controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
+                    info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get()))
+                }));
+                controller.connect_leave(clone!(@weak info_label => move |_| {
+                    info_label.set_label("");
+                }));
+                brightness_button.connect_clicked(clone!(@weak info_label, @weak brightness_button, @weak self as window => move |_| {
+                    if window.imp().brightness.get() < 20.0 {
+                        window.imp().brightness.set(100.0)
+                    } else if window.imp().brightness.get() < 21.0 {
+                        window.imp().brightness.set(1.0)
+                    } else {
+                        window.imp().brightness.set(window.imp().brightness.get() - 20.0)
+                    }
+                    info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get()));
+                    brightness_set_css(&brightness_button, window.imp().brightness.get());
+
+                    Command::new("ddcutil").arg("setvcp").arg("10").arg(format!("{}", window.imp().brightness.get())).output().unwrap();
+                }));
             } else {
                 brightness_button.set_sensitive(false);
             }
         }
-        brightness_set_css(&brightness_button, self.imp().brightness.get());
-        // adding a widget controller to show info on hover
-        brightness_button.add_controller(&controller);
-        controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
-            info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get()))
-        }));
-        controller.connect_leave(clone!(@weak info_label => move |_| {
-            info_label.set_label("");
-        }));
-        brightness_button.connect_clicked(clone!(@weak info_label, @weak brightness_button, @weak self as window => move |_| {
-            if window.imp().brightness.get() < 20.0 {
-                window.imp().brightness.set(100.0)
-            } else if window.imp().brightness.get() < 21.0 {
-                 window.imp().brightness.set(1.0)
-            } else {
-                window.imp().brightness.set(window.imp().brightness.get() - 20.0)
-            }
-            info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get()));
-            brightness_set_css(&brightness_button, window.imp().brightness.get());
-
-            Command::new("ddcutil").arg("setvcp").arg("10").arg(format!("{}", window.imp().brightness.get())).output().unwrap();
-        }));
     }
 }

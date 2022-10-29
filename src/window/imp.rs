@@ -10,6 +10,7 @@ use std::ptr::NonNull;
 use std::thread;
 use std::thread::sleep;
 use std::time::Duration;
+use debug_print::debug_println;
 use gio::glib::{clone, Type};
 use gio::glib::subclass::TypeData;
 use gtk::ffi::{GtkEventController, GtkEventControllerMotion, GtkEventControllerMotionClass};
@@ -20,6 +21,7 @@ use crate::custom_widgets::{LockButton};
 #[derive(CompositeTemplate, Default)]
 #[template(resource = "/org/gtk_rs/example/MainWindow.ui")]
 pub struct Window {
+    pub is_initialised: bool,
     #[template_child]
     pub start_win_vm: TemplateChild<Button>,
     #[template_child]
@@ -70,6 +72,7 @@ impl ObjectImpl for Window {
         self.parent_constructed();
 
         let obj = self.obj();
+        debug_println!("initiating button behaviour");
         obj.setup_lock_button();
         obj.setup_exit_button();
         obj.setup_win_vm_button();
@@ -77,6 +80,7 @@ impl ObjectImpl for Window {
         obj.setup_reboot_button();
         obj.setup_brightness_button();
 
+        debug_println!("linking css classes");
         self.exit_button.add_css_class("warning_button");
         self.shutdown_button.add_css_class("warning_button");
         self.reboot_button.add_css_class("warning_button");
@@ -94,12 +98,12 @@ impl Window {
             button.set_css_classes(&["lock-closed"]);
             self.lock_label.set_label("");
             self.info_label.set_label("Screen Timeout\nON");
-            Command::new("sh").arg("scripts/swayidle.sh").spawn().expect("failed to execute process")
+            Command::new("sh").arg("scripts/swayidle.sh").arg("-e").spawn().expect("failed to execute process");
         } else {
             button.set_css_classes(&["lock-open"]);
             self.lock_label.set_label("");
             self.info_label.set_label("Screen Timeout\nOFF");
-            Command::new("killall").arg("swayidle").spawn().expect("failed to execute process")
+            Command::new("sh").arg("scripts/swayidle.sh").arg("-d").spawn().expect("failed to execute swayidle script");
         };
     }
 }
