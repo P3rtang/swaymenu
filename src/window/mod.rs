@@ -230,4 +230,23 @@ impl Window {
             }
         }
     }
+    fn setup_sleep_button(&self) {
+        let sleep_button = self.imp().sleep_button.get();
+        let info_label = self.imp().info_label.get();
+        let controller = EventControllerMotion::new();
+
+        sleep_button.add_controller(&controller);
+        controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
+            info_label.set_label("Suspend");
+            info_label.set_css_classes(&["sleep"]);
+        }));
+        controller.connect_leave(clone!(@weak info_label, @weak self as window => move |_| {
+            info_label.set_label("");
+            info_label.remove_css_class("sleep");
+        }));
+
+        sleep_button.connect_clicked(move |_| {
+            Command::new("systemctl").arg("suspend").output().unwrap();
+        });
+    }
 }

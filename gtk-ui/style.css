@@ -29,6 +29,15 @@ window {
     background: @blue;
     color: @background;
 }
+/* sleep button */
+#sleep_button {
+    background: @background;
+    color: @purple;
+}
+#sleep_button:hover {
+    background: @purple;
+    color: @background;
+}
 /* sway lock button */
 /* closed */
 #lock_button.lock-closed {
@@ -74,4 +83,7 @@ button {
 }
 #info_label.warning_hover {
     color: @bright-red;
+}
+#info_label.sleep {
+    color: @purple;
 }

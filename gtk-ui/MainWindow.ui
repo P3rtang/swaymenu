@@ -93,6 +93,30 @@
                     </object>
                 </child>
                 <child>
+                    <object class="GtkButton" id="sleep_button">
+                        <property name="name">sleep_button</property>
+                        <child>
+                            <object class="GtkLabel" id="sleep_button_label">
+                                <property name="can-focus">False</property>
+                                <property name="label"></property>
+                                <attributes>
+                                    <attribute name="font-desc" value="Font Awesome 5 Free Solid 40"/>
+                                </attributes>
+                            </object>
+                        </child>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="width-request">80</property>
+                        <property name="height-request">80</property>
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">2</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
                     <object class="GtkButton" id="exit_button">
                         <child>
                             <object class="GtkLabel" id="exit_button_label">
@@ -110,7 +134,7 @@
                         <property name="width-request">80</property>
                         <property name="height-request">80</property>
                         <layout>
-                            <property name="column">0</property>
+                            <property name="column">1</property>
                             <property name="row">2</property>
                         </layout>
                     </object>
@@ -133,7 +157,7 @@
                         <property name="width-request">80</property>
                         <property name="height-request">80</property>
                         <layout>
-                            <property name="column">1</property>
+                            <property name="column">2</property>
                             <property name="row">2</property>
                         </layout>
                     </object>
@@ -157,7 +181,7 @@
                         <property name="width-request">80</property>
                         <property name="height-request">80</property>
                         <layout>
-                            <property name="column">2</property>
+                            <property name="column">3</property>
                             <property name="row">2</property>
                         </layout>
                     </object>
