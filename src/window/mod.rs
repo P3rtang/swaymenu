@@ -30,19 +30,9 @@ impl Window {
         let lock_button = self.imp().lock_button.get();
         let lock_label = self.imp().lock_label.get();
 
-        let current_lock_state = Command::new("ps").arg("-ef").output().expect("failed to execute command");
-        let mut sway_idle_count = 0;
-        for out_item in String::from_utf8(current_lock_state.stdout) {
-            if out_item.contains("swayidle") { sway_idle_count += 1 }
-        }
-        if sway_idle_count != 0 {
-            lock_label.set_label("");
-            lock_button.set_css_classes(&["lock-closed"]);
-            self.imp().lock_state.set(1);
-        } else {
-            lock_label.set_label("");
-            lock_button.set_css_classes(&["lock-open"]);
-        }
+        lock_label.set_label("");
+        lock_button.set_css_classes(&["lock-closed"]);
+        self.imp().lock_state.set(1);
 
         lock_button.add_controller(&controller);
         controller.connect_enter(clone!(@weak self as window => move |_,_,_| {
@@ -248,5 +238,18 @@ impl Window {
         sleep_button.connect_clicked(move |_| {
             Command::new("systemctl").arg("suspend").output().unwrap();
         });
+    }
+    fn setup_volume_button(&self) {
+        let volume_button = self.imp().sound_level_button.get();
+        let info_label = self.imp().info_label.get();
+        let controller = EventControllerMotion::new();
+        
+        volume_button.add_controller(&controller);
+        controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
+            info_label.set_label("Volume");
+        }));
+        controller.connect_leave(clone!(@weak info_label, @weak self as window => move |_| {
+            info_label.set_label("");
+        }));
     }
 }

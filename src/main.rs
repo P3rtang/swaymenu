@@ -8,10 +8,13 @@ use window::Window;
 use debug_print::debug_println;
 use gio::SimpleAction;
 use glib::clone;
+use alsa::card;
+use alsa::mixer;
 
 const APP_ID: &str = "org.gtk_rs.SwayMenu";
 
 fn main() {
+    get_sound_cards();
     // Register and include resources
     gio::resources_register_include!("swaymenu.gresource")
         .expect("Failed to register resources.");
@@ -23,7 +26,7 @@ fn main() {
     app.connect_activate(build_ui);
 
     // Pressing escape closes the menu
-    app.set_accels_for_action("win.minimize", &["Escape"]);
+    app.set_accels_for_action("win.minimize", &["Escape", "q"]);
 
     // Run the application
     app.run();
@@ -69,4 +72,10 @@ fn load_css() {
         &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
+}
+
+fn get_sound_cards() {
+    let cards = card::Iter::new();
+    let mixer = mixer::Mixer::new("0", true);
+    println!("{:?}", mixer)
 }

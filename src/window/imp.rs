@@ -46,6 +46,8 @@ pub struct Window {
     pub spinner: TemplateChild<Spinner>,
     #[template_child]
     pub sleep_button: TemplateChild<Button>,
+    #[template_child]
+    pub sound_level_button: TemplateChild<Button>,
 }
 
 // The central trait for subclassing a GObject
@@ -82,6 +84,7 @@ impl ObjectImpl for Window {
         obj.setup_reboot_button();
         obj.setup_brightness_button();
         obj.setup_sleep_button();
+        obj.setup_volume_button();
 
         debug_println!("linking css classes");
         self.exit_button.add_css_class("warning_button");

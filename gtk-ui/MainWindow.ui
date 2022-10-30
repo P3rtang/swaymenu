@@ -27,7 +27,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 6 Free 45"/>
+                                    <attribute name="font-desc" value="Font Awesome 6 Pro Solid 45"/>
                                 </attributes>
                             </object>
                         </child>
@@ -35,10 +35,35 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
                             <property name="column">0</property>
+                            <property name="row">1</property>
+                        </layout>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkButton" id="sound_level_button">
+                        <property name="name">sound_level_button</property>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="can-focus">False</property>
+                                <property name="label"></property>
+                                <property name="halign">start</property>
+                                <attributes>
+                                    <attribute name="font-desc" value="Font Awesome 6 Pro Solid 42"/>
+                                </attributes>
+                            </object>
+                        </child>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-start">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
+                        <layout>
+                            <property name="column">1</property>
                             <property name="row">1</property>
                         </layout>
                     </object>
@@ -60,10 +85,10 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
-                            <property name="column">1</property>
+                            <property name="column">2</property>
                             <property name="row">1</property>
                         </layout>
                     </object>
@@ -76,7 +101,7 @@
                                 <property name="can-focus">False</property>
                                 <property name="label"></property>
                                 <attributes>
-                                    <attribute name="font-desc" value="Font Awesome 5 Free Brands 40"/>
+                                    <attribute name="font-desc" value="Font Awesome 5 Solid 40"/>
                                 </attributes>
                             </object>
                         </child>
@@ -84,10 +109,10 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
-                            <property name="column">2</property>
+                            <property name="column">3</property>
                             <property name="row">1</property>
                         </layout>
                     </object>
@@ -108,8 +133,8 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
                             <property name="column">0</property>
                             <property name="row">2</property>
@@ -131,8 +156,8 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
                             <property name="column">1</property>
                             <property name="row">2</property>
@@ -154,8 +179,8 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
                             <property name="column">2</property>
                             <property name="row">2</property>
@@ -178,8 +203,8 @@
                         <property name="margin-bottom">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
-                        <property name="width-request">80</property>
-                        <property name="height-request">80</property>
+                        <property name="width-request">84</property>
+                        <property name="height-request">84</property>
                         <layout>
                             <property name="column">3</property>
                             <property name="row">2</property>
@@ -198,7 +223,7 @@
                         <layout>
                             <property name="column">0</property>
                             <property name="row">3</property>
-                            <property name="column-span">3</property>
+                            <property name="column-span">4</property>
                         </layout>
                     </object>
                 </child>
@@ -206,7 +231,7 @@
                     <object class="GtkLabel" id="info_label">
                         <property name="can-focus">False</property>
                         <property name="name">info_label</property>
-                        <property name="height-request">80</property>
+                        <property name="height-request">84</property>
                         <property name="justify">center</property>
                         <attributes>
                             <attribute name="font-desc" value="Font Awesome 5 Free Brands 18"/>
@@ -214,7 +239,7 @@
                         <layout>
                             <property name="column">0</property>
                             <property name="row">3</property>
-                            <property name="column-span">3</property>
+                            <property name="column-span">4</property>
                         </layout>
                     </object>
                 </child>

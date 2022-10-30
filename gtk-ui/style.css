@@ -72,6 +72,14 @@ window {
     color: @background;
     background: @yellow;
 }
+#sound_level_button {
+    color: @green;
+    background: @background;
+}
+#sound_level_button:hover {
+    color: @background;
+    background: @green;
+}
 /* every button */
 button {
     border: transparent;
