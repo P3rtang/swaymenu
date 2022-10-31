@@ -2,8 +2,7 @@ mod imp;
 
 use std::fs;
 use std::io::Write;
-use std::ops::Deref;
-use std::path::{Component, Path};
+use std::path::{Path, PathBuf};
 use glib::{Object, clone, timeout_future_seconds};
 use gtk::subclass::prelude::*;
 use gtk::prelude::*;
@@ -152,61 +151,72 @@ impl Window {
                 button.set_css_classes(&["high"]);
             }
         }
+        fn get_brightness_file_path() -> Option<PathBuf> {
+            return match Path::new("/sys/class/backlight").read_dir() {
+                Ok(dir) => {
+                    for folder in dir {
+                        // only advance if the found entry is a dir
+                        if folder.as_ref().expect("Could not access file").path().is_dir() {
+                            match folder.as_ref().unwrap().path().read_dir() {
+                                Ok(sub_dir) => {
+                                    for file in sub_dir {
+                                        if file.expect("Could not access file").file_name() == "brightness" {
+                                            println!("found brightness folder path");
+                                            return Some(folder.unwrap().path())
+                                        }
+                                    }
+                                }
+                                Err(_) => {}
+                            }
+                        }
+                    }
+                    None
+                }
+                Err(_) => { None }
+            }
+        }
         let controller = EventControllerMotion::new();
         let info_label = self.imp().info_label.get();
         let brightness_button = self.imp().brightness_button.get();
 
-        let brightness_class_dir = Path::new("/sys/class/backlight/");
-        let sub_folders = brightness_class_dir.read_dir().unwrap();
-        let mut brightness_file_dir = Path::new("");
-        for f in sub_folders {
-            if let Ok(folder) = f {
-                match folder.path().read_dir() {
-                    Ok(backlight_files) => {
-                        for f in backlight_files {
-                            if let Ok(file) = f {
-                                if file.file_name() == "brightness" {
-                                    println!("brightness file found");
-                                    if !file.metadata().unwrap().permissions().readonly() {
-                                        println!("brightness file correct permissions");
-                                        let max = fs::read_to_string(folder.path().join("max_brightness"))
-                                            .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
-                                        let current = fs::read_to_string(file.path())
-                                            .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
-                                        self.imp().brightness.set((current / max * 100.0).ceil());
-                                        brightness_set_css(&brightness_button, current / max * 100.0);
-                                        brightness_button.add_controller(&controller);
-                                        controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
-                                            info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get().ceil()))
-                                        }));
-                                        controller.connect_leave(clone!(@weak info_label => move |_| {
-                                            info_label.set_label("");
-                                        }));
-                                        brightness_button.connect_clicked(clone!(@weak info_label, @weak brightness_button, @weak self as window => move |_| {
-                                            if window.imp().brightness.get() < 20.0 {
-                                                window.imp().brightness.set(100.0)
-                                            } else if window.imp().brightness.get() < 21.0 {
-                                                window.imp().brightness.set(1.0)
-                                            } else {
-                                                window.imp().brightness.set(window.imp().brightness.get() - 20.0)
-                                            }
-                                            info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get().ceil()));
-                                            brightness_set_css(&brightness_button, window.imp().brightness.get());
-
-                                            let mut f = fs::OpenOptions::new().write(true).open(file.path()).unwrap();
-                                            f.write_all(format!("{}", (window.imp().brightness.get() / 100.0 * max) as i32).as_bytes()).unwrap();
-                                            f.flush().unwrap();
-
-                                        }));
-                                        return
-                                    }
-                                }
-                            }
+        let brightness_folder = get_brightness_file_path();
+        match brightness_folder {
+            Some(folder) => {
+                if !folder.join("brightness").metadata().unwrap().permissions().readonly() {
+                    println!("brightness file correct permissions");
+                    let max = fs::read_to_string(folder.join("max_brightness"))
+                        .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
+                    let current = fs::read_to_string(folder.join("brightness"))
+                        .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
+                    self.imp().brightness.set((current / max * 100.0).ceil());
+                    brightness_set_css(&brightness_button, current / max * 100.0);
+                    brightness_button.add_controller(&controller);
+                    controller.connect_enter(clone!(@weak info_label, @weak self as window => move |_,_,_| {
+                        info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get().ceil()))
+                    }));
+                    controller.connect_leave(clone!(@weak info_label => move |_| {
+                        info_label.set_label("");
+                    }));
+                    brightness_button.connect_clicked(clone!(@weak info_label, @weak brightness_button, @weak self as window => move |_| {
+                        if window.imp().brightness.get() < 20.0 {
+                            window.imp().brightness.set(100.0)
+                        } else if window.imp().brightness.get() < 21.0 {
+                            window.imp().brightness.set(1.0)
+                        } else {
+                            window.imp().brightness.set(window.imp().brightness.get() - 20.0)
                         }
-                    },
-                    Err(_) => {}
+                        info_label.set_label(&format!("Brightness {}%", window.imp().brightness.get().ceil()));
+                        brightness_set_css(&brightness_button, window.imp().brightness.get());
+
+                        let mut f = fs::OpenOptions::new().write(true).open(folder.join("brightness")).unwrap();
+                        f.write_all(format!("{}", (window.imp().brightness.get() / 100.0 * max) as i32).as_bytes()).unwrap();
+                        f.flush().unwrap();
+
+                    }));
+                    return
                 }
             }
+            None => {}
         }
         let brightness_vec = Command::new("ddcutil").arg("getvcp").arg("10").output().unwrap();
 
