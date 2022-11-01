@@ -76,7 +76,7 @@ impl ObjectImpl for Window {
         self.parent_constructed();
 
         let obj = self.obj();
-        debug_println!("initiating button behaviour");
+        debug_println!("[INFO] initiating button behaviour");
         obj.setup_lock_button();
         obj.setup_exit_button();
         obj.setup_win_vm_button();
@@ -86,7 +86,7 @@ impl ObjectImpl for Window {
         obj.setup_sleep_button();
         obj.setup_volume_button();
 
-        debug_println!("linking css classes");
+        debug_println!("[INFO] linking css classes");
         self.exit_button.add_css_class("warning_button");
         self.shutdown_button.add_css_class("warning_button");
         self.reboot_button.add_css_class("warning_button");

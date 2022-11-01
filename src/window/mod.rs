@@ -8,6 +8,7 @@ use gtk::subclass::prelude::*;
 use gtk::prelude::*;
 use gtk::{gio, glib, Application, EventControllerMotion, Button};
 use std::process::Command;
+use debug_print::debug_println;
 use gio::glib::MainContext;
 
 
@@ -161,7 +162,7 @@ impl Window {
                                 Ok(sub_dir) => {
                                     for file in sub_dir {
                                         if file.expect("Could not access file").file_name() == "brightness" {
-                                            println!("found brightness folder path");
+                                            debug_println!("[INFO] found brightness folder path");
                                             return Some(folder.unwrap().path())
                                         }
                                     }
@@ -183,7 +184,7 @@ impl Window {
         match brightness_folder {
             Some(folder) => {
                 if !folder.join("brightness").metadata().unwrap().permissions().readonly() {
-                    println!("brightness file correct permissions");
+                    debug_println!("[INFO] brightness file correct permissions");
                     let max = fs::read_to_string(folder.join("max_brightness"))
                         .expect("Should have been able to read the file").replace('\n', "").parse::<f32>().unwrap();
                     let current = fs::read_to_string(folder.join("brightness"))

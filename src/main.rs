@@ -8,13 +8,10 @@ use window::Window;
 use debug_print::debug_println;
 use gio::SimpleAction;
 use glib::clone;
-use alsa::card;
-use alsa::mixer;
 
 const APP_ID: &str = "org.gtk_rs.SwayMenu";
 
 fn main() {
-    get_sound_cards();
     // Register and include resources
     gio::resources_register_include!("swaymenu.gresource")
         .expect("Failed to register resources.");
@@ -33,12 +30,11 @@ fn main() {
 }
 
 fn build_ui(app: &Application) {
-    debug_println!("[INFO]: creating window");
-    println!("{}", app.windows().len());
     if app.windows().len() == 0 {
+        debug_println!("[INFO]: creating window");
         // Create new window and present it
         let window = Window::new(app);
-        debug_println!("[INFO]: showing window");
+        debug_println!("[INFO] creating window content");
         window.present();
 
         let action_minimize = SimpleAction::new("minimize", None);
@@ -57,6 +53,7 @@ fn build_ui(app: &Application) {
         window.add_css_class("window");
         window.hide();
     } else {
+        debug_println!("Window already build ... showing window");
         app.windows().get(0).unwrap().show();
     }
 }
@@ -72,10 +69,4 @@ fn load_css() {
         &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
-}
-
-fn get_sound_cards() {
-    let cards = card::Iter::new();
-    let mixer = mixer::Mixer::new("0", true);
-    println!("{:?}", mixer)
 }
